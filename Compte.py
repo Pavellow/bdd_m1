@@ -39,6 +39,11 @@ class Compte:
                     (self.Password, self.Nom, self.Prenom))
         conn.commit()
         cur.close()
+
+    def ecrire_requete_dans_fichier(self, nom_fichier):
+        requete = "INSERT INTO compte (Password, Nom, Prenom) VALUES (%s, %s, %s)" % (self.Password, self.Nom, self.Prenom)
+        with open(nom_fichier, "a") as fichier:
+            fichier.write(requete + "\n\n")
     
     def update_compte_bdd(self, conn, id):
         cur = conn.cursor()

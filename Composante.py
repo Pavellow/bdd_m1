@@ -26,6 +26,11 @@ class Composante:
         conn.commit()
         cur.close()
 
+    def ecrire_requete_dans_fichier(self, nom_fichier):
+        requete = "INSERT INTO composante (Libelle_composante, id_composante) VALUES (%s, %s)" % (self.Libelle_composante, self.id_composante)
+        with open(nom_fichier, "a") as fichier:
+            fichier.write(requete + "\n\n")
+
     def update_composante_libelle_bdd(self, conn, id):
         cur = conn.cursor()
         cur.execute(f"UPDATE composante SET Libelle_composante = {self.Libelle_composante} WHERE Id_composante = {id}")

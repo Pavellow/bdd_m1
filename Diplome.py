@@ -17,6 +17,11 @@ class Diplome:
             conn.commit()
             cur.close()
 
+    def ecrire_requete_dans_fichier(self, nom_fichier):
+        requete = "INSERT INTO diplome (Libelle_diplome, id_composante) VALUES (%s, %s)" % (self.Libelle_diplome, self.id_composante)
+        with open(nom_fichier, "a") as fichier:
+            fichier.write(requete + "\n\n")
+
     def update_diplome_bdd(self, conn, id):
         cur = conn.cursor()
         cur.execute(f"UPDATE diplome SET Libelle_diplome = '{self.Libelle_diplome}', id_composante = '{self.id_composante}' WHERE Id_diplome = {id}")

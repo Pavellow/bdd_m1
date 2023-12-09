@@ -16,6 +16,10 @@ class Etape:
         conn.commit()
         cur.close()
 
+    def ecrire_requete_dans_fichier(self, nom_fichier):
+        requete = "INSERT INTO etape (Nom_filiere, Niveau) VALUES (%s, %s)" % (self.Nom_filiere, self.Niveau)
+        with open(nom_fichier, "a") as fichier:
+            fichier.write(requete + "\n\n")
 
     def update_etape_bdd(self, conn, id):
         cur = conn.cursor()

@@ -22,3 +22,8 @@ class Entreprise:
                     (self.Nom))
         conn.commit()
         cur.close()
+
+    def ecrire_requete_dans_fichier(self, nom_fichier):
+        requete = "INSERT INTO entreprise (nom_entreprise) VALUES (%s)" % (self.Nom)
+        with open(nom_fichier, "a") as fichier:
+            fichier.write(requete + "\n\n")

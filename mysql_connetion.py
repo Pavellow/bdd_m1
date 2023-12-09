@@ -41,7 +41,8 @@ def populate_composante():
         composante.set_libelle(libelle)
         composante.set_id(i)
         i += 1
-        composante.add_composante_bdd(conn) 
+        #composante.add_composante_bdd(conn)
+        composante.ecrire_requete_dans_fichier("composantes.sql") 
 
 def generer_diplomes(diplomes, filieres, exclusions):
     combinaisons = []
@@ -68,7 +69,6 @@ def generer_etapes(diplomes, etapes, exclusions, etapes_dict):
                 combinaisons.append(combinaison_finale)
     return combinaisons
 
-
 def populate_diplome():
     diplomes = ["Licence", "Master", "Doctorat"]
     filieres = [
@@ -90,7 +90,8 @@ def populate_diplome():
     combinaisons_diplomes = generer_diplomes(diplomes, filieres, exclusions)
     for i in range(len(combinaisons_diplomes)):
         diplome = Diplome(combinaisons_diplomes[i][1], combinaisons_diplomes[i][0])
-        diplome.add_diplome_bdd(conn)
+        #diplome.add_diplome_bdd(conn)
+        diplome.ecrire_requete_dans_fichier("diplomes.sql")
 
 def populate_etape():
     etapes = ["L1", "L2", "L3", "M1", "M2"]
@@ -122,19 +123,22 @@ def populate_etape():
     combin = generer_etapes(dut, niveau, [], niveau_dict)
     for etape in combin:
         etape = Etape(etape[1], etape[0])
-        etape.add_etape_bdd(conn)
+        #etape.add_etape_bdd(conn)
+        etape.ecrire_requete_dans_fichier("etapes.sql")
 
 def populate_entreprise():
     nom = faker.company()
     entreprise = Entreprise(nom)
-    entreprise.add_entreprise_bdd(conn)
+    #entreprise.add_entreprise_bdd(conn)
+    entreprise.ecrire_requete_dans_fichier("entreprises.sql")
 
 def populate_compte():
     prenom = faker.name().split()[0]
     nom = faker_it.name().split()[-1]
     compte = Compte(generate_random_string(), nom, prenom)
     print(compte)
-    compte.add_compte_bdd(conn)
+    #compte.add_compte_bdd(conn)
+    compte.ecrire_requete_dans_fichier("comptes.sql")
 
 def choisir_entier_aleatoire_unique(min_val, max_val, deja_utilises):
     while True:
@@ -156,7 +160,8 @@ def populate_etudiant_aleatoire(deja_used_randint):
 def populate_enseignant():
     for i in range(200):
         enseignant = Enseignant(i)
-        enseignant.add_enseignant_bdd(conn)
+        #enseignant.add_enseignant_bdd(conn)
+        enseignant.ecrire_requete_dans_fichier("enseignants.sql")
 
 import random
 
@@ -175,12 +180,14 @@ def populate_etudiant():
     attribution, comptage = attribuer_filiere_et_compter_etudiants(1500, 145)
     for id_etudiant in attribution:
         etudiant = Etudiant(attribution[id_etudiant], id_etudiant)
-        etudiant.add_etudiant_bdd(conn)
+        #etudiant.add_etudiant_bdd(conn)
+        etudiant.ecrire_requete_dans_fichier("etudiants.sql")
 
 def populate_tuteur(nbr_tuteurs):
     for _ in range(nbr_tuteurs):
         tuteur = Tuteur(faker.name(), random.randint(1, 200))
-        tuteur.add_tuteur_bdd(conn)
+        #tuteur.add_tuteur_bdd(conn)
+        tuteur.ecrire_requete_dans_fichier("tuteurs.sql")
 
 def get_l3m1m2():
     cur = conn.cursor()
@@ -229,7 +236,8 @@ for id_stagiaire in id_stagiaires_possible:
     stages = generer_stage(id_stagiaire[0], 200, 200)
     if stages:
         obj_stage = Stage(stages[0][0], stages[0][1], stages[0][2], stages[0][3], stages[0][4], stages[0][5], stages[0][6], stages[0][7], stages[0][8])
-        obj_stage.add_stage_bdd(conn)
+        #obj_stage.add_stage_bdd(conn)
+        obj_stage.ecrire_requete_dans_fichier("stages.sql")
     else:
         print(f"Aucun stage généré pour l'étudiant {id_stagiaire[0]}")
 

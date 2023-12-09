@@ -14,6 +14,11 @@ class Tuteur:
         conn.commit()
         cur.close()
 
+    def ecrire_requete_dans_fichier(self, nom_fichier):
+        requete = f"INSERT INTO tuteur (Nom_tuteur, id_entreprise) VALUES (%s, %s)" % (self.Nom_tuteur, self.id_entreprise)
+        with open(nom_fichier, "a") as fichier:
+            fichier.write(requete + "\n\n")
+
     def update_tuteur_bdd(self, conn, id):
         cur = conn.cursor()
         cur.execute(f"UPDATE tuteur SET Nom_tuteur = '{self.Nom_tuteur}', id_entreprise = '{self.id_entreprise}' WHERE Id_tuteur = {id}")
