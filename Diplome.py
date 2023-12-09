@@ -1,19 +1,19 @@
 class Diplome:
 
-    def __init__(id_diplome, Libelle_diplome, id_composante):
-        self.Id_diplome = id_diplome
+    def __init__(self, Libelle_diplome, id_composante):
         self.Libelle_diplome = Libelle_diplome
         self.id_composante = id_composante
 
     def __str__(self):
-        return f"Diplome: {self.Id_diplome}, {self.Libelle_diplome}, {self.id_composante}"
+        return f"Diplome: {self.Libelle_diplome}, {self.id_composante}"
 
     #Méthodes d'opérations CRUD
 
     def add_diplome_bdd(self, conn):
             
             cur = conn.cursor()
-            cur.execute(f"INSERT INTO diplome (Libelle_diplome, id_composante) VALUES ('{self.Libelle_diplome}', '{self.id_composante}')")
+            cur.execute("INSERT INTO diplome (Libelle_diplome, id_composante) VALUES (%s, %s)", 
+                    (self.Libelle_diplome, self.id_composante))
             conn.commit()
             cur.close()
 

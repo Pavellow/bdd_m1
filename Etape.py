@@ -1,6 +1,6 @@
 class Etape:
 
-    def __init__(self, Nom_filiere, NIveau):
+    def __init__(self, Nom_filiere, Niveau):
         self.Nom_filiere = Nom_filiere
         self.Niveau = Niveau
 
@@ -10,11 +10,12 @@ class Etape:
     #Méthodes d'opérations CRUD
 
     def add_etape_bdd(self, conn):
-            
-            cur = conn.cursor()
-            cur.execute(f"INSERT INTO etape (Nom_filiere, Niveau) VALUES ('{self.Nom_filiere}', '{self.Niveau}')")
-            conn.commit()
-            cur.close()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO etape (Nom_filiere, Niveau) VALUES (%s, %s)", 
+                    (self.Nom_filiere, self.Niveau))
+        conn.commit()
+        cur.close()
+
 
     def update_etape_bdd(self, conn, id):
         cur = conn.cursor()
