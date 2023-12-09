@@ -1,7 +1,8 @@
 class Composante:
     
-    def __init__(self, libelle):
+    def __init__(self, libelle, id_composante):
         self.Libelle_composante = libelle
+        self.id_composante = id_composante
 
     def __str__(self):
         return f"Composante: {self.Libelle_composante}"
@@ -11,13 +12,19 @@ class Composante:
     def add_composante_bdd(self, conn):
         
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO composante (Libelle_composante) VALUES ('{self.Libelle_composante}')")
+        cur.execute(f"INSERT INTO composante (Libelle_composante, id_composante) VALUES ('{self.Libelle_composante}', '{self.id_composante}')")
         conn.commit()
         cur.close()
 
-    def update_composante_bdd(self, conn, id):
+    def update_composante_libelle_bdd(self, conn, id):
         cur = conn.cursor()
         cur.execute(f"UPDATE composante SET Libelle_composante = '{self.Libelle_composante}' WHERE Id_composante = {id}")
+        conn.commit()
+        cur.close()
+
+    def update_composante_id_bdd(self, conn, id):
+        cur = conn.cursor()
+        cur.execute(f"UPDATE composante SET id_composante = '{self.id_composante}' WHERE Id_composante = {id}")
         conn.commit()
         cur.close()
 

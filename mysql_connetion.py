@@ -1,6 +1,7 @@
 from SQLConn import *
 
 from Composante import *
+from Etudiant import *
 
 host = "localhost"
 user = "admin"
@@ -8,6 +9,6 @@ password = "admin"
 db = "bdd_tp_test"
 
 sql = SQLConn(host, user, password, db)
-sql.connect()
+conn = sql.connect_to_bdd()
 
-composante = Composante()
+etudiant = Etudiant()

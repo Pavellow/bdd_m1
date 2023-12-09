@@ -2,16 +2,16 @@ import pymysql
 
 class SQLConn:
 
-    def __init__(self, host, user, password, database, conn):
+    def __init__(self, host, user, password, database):
         self.host = host
         self.user = user
         self.password= password
         self.database = database
     
-    def connect(self):
-        self.conn = pymysql.connect(self.host, self.user, self.password, self.database)
-        self.cursor = self.conn.cursor()
+    def connect_to_bdd(self):
+        self.conn = pymysql.connect(host=self.host, user=self.user,password=self.password, database=self.database)
+        return self.conn
 
-    def close(self):
+    def close_connection(self):
         self.conn.close()
         self.cursor.close()
