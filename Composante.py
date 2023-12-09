@@ -7,18 +7,28 @@ class Composante:
     def __str__(self):
         return f"Composante: {self.Libelle_composante}"
     
+    def to_string(self):
+        return f"Composante: {self.Libelle_composante} | id: {self.id_composante}"
+    
+    def set_libelle(self, libelle_param):
+        self.Libelle_composante = libelle_param
+
+    def set_id(self, id_param):
+        self.id_composante = id_param
+
+    
     #Méthodes d'opérations CRUD
 
     def add_composante_bdd(self, conn):
-        
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO composante (Libelle_composante, id_composante) VALUES ('{self.Libelle_composante}', '{self.id_composante}')")
+        cur.execute("INSERT INTO composante (Libelle_composante, id_composante) VALUES (%s, %s)", 
+                    (self.Libelle_composante, self.id_composante))
         conn.commit()
         cur.close()
 
     def update_composante_libelle_bdd(self, conn, id):
         cur = conn.cursor()
-        cur.execute(f"UPDATE composante SET Libelle_composante = '{self.Libelle_composante}' WHERE Id_composante = {id}")
+        cur.execute(f"UPDATE composante SET Libelle_composante = {self.Libelle_composante} WHERE Id_composante = {id}")
         conn.commit()
         cur.close()
 

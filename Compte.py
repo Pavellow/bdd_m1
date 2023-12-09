@@ -7,13 +7,36 @@ class Compte:
 
     def __str__(self):
         return f"Compte: {self.Password}, {self.Nom}, {self.Prenom}"
+     # Getter pour le mot de passe
 
+    def get_password(self):
+        return self.Password
+
+    # Setter pour le mot de passe
+    def set_password(self, password):
+        self.Password = password
+
+    # Getter pour le nom
+    def get_nom(self):
+        return self.Nom
+
+    # Setter pour le nom
+    def set_nom(self, nom):
+        self.Nom = nom
+
+    # Getter pour le prénom
+    def get_prenom(self):
+        return self.Prenom
+
+    # Setter pour le prénom
+    def set_prenom(self, prenom):
+                self.Prenom = prenom
     #Méthodes d'opérations CRUD
 
     def add_compte_bdd(self, conn):
-        
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO compte (Password, Nom, Prenom) VALUES ('{self.Password}', '{self.Nom}', '{self.Prenom}')")
+        cur.execute("INSERT INTO compte (Password, Nom, Prenom) VALUES (%s, %s, %s)", 
+                    (self.Password, self.Nom, self.Prenom))
         conn.commit()
         cur.close()
     
