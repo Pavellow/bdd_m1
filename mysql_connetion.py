@@ -6,6 +6,7 @@ from Compte import *
 from Diplome import *
 from Etape import *
 from Entreprise import *
+from Enseignant import *
 
 from util  import *
 from faker import Faker
@@ -17,6 +18,9 @@ host = "localhost"
 user = "admin"
 password = "admin"
 db = "bdd_tp_test"
+
+# utile pour le peuplement des tables
+deja_used_randint = []
 
 sql = SQLConn(host, user, password, db)
 conn = sql.connect_to_bdd()
@@ -122,15 +126,53 @@ def populate_entreprise():
     entreprise = Entreprise(nom)
     entreprise.add_entreprise_bdd(conn)
 
-def populate_etudiant():
-    etudiant = Etudiant("", "")
-
 def populate_compte():
     prenom = faker.name().split()[0]
     nom = faker_it.name().split()[-1]
     compte = Compte(generate_random_string(), nom, prenom)
     print(compte)
     compte.add_compte_bdd(conn)
+
+def choisir_entier_aleatoire_unique(min_val, max_val, deja_utilises):
+    while True:
+        entier_aleatoire = random.randint(min_val, max_val)
+        if entier_aleatoire not in deja_utilises:
+            deja_utilises.append(entier_aleatoire)
+            return entier_aleatoire
+
+def populate_enseignant_aleatoire(deja_used_randint):
+    entier = choisir_entier_aleatoire_unique(0, 2000, deja_used_randint)
+    enseignant = Enseignant(entier)
+    enseignant.add_enseignant_bdd(conn)
+
+def populate_etudiant_aleatoire(deja_used_randint):
+    entier = choisir_entier_aleatoire_unique(0, 2000, deja_used_randint)
+    etudiant = Etudiant(entier, entier)
+    etudiant.add_etudiant_bdd(conn)
+
+def populate_enseignant():
+    for i in range(200):
+        enseignant = Enseignant(i)
+        enseignant.add_enseignant_bdd(conn)
+
+import random
+
+def attribuer_filiere_et_compter_etudiants(nb_etudiants, nb_filieres):
+    attribution_filiere = {}
+    compteur_etudiants_par_filiere = {filiere: 0 for filiere in range(1, nb_filieres + 1)}
+
+    for id_etudiant in range(201, 201 + nb_etudiants):
+        id_filiere = random.randint(1, nb_filieres)
+        attribution_filiere[id_etudiant] = id_filiere
+        compteur_etudiants_par_filiere[id_filiere] += 1
+
+    return attribution_filiere, compteur_etudiants_par_filiere
+
+def populate_etudiant():
+    attribution, comptage = attribuer_filiere_et_compter_etudiants(1500, 145)
+    for id_etudiant in attribution:
+        etudiant = Etudiant(attribution[id_etudiant], id_etudiant)
+        etudiant.add_etudiant_bdd(conn)
 
 """ for i in range(1000):
     populate_compte() """
@@ -139,6 +181,12 @@ def populate_compte():
     Entreprise(faker.company()).add_entreprise_bdd(conn) """
 
 # Il y a actuellement 2001 comptes sur la bdd
+""" for i in range(200):
+    populate_enseignant(deja_used_randint)
 
+for i in range(1500):
+    populate_etudiant(deja_used_randint) """
+
+#populate_etudiant()
 
 sql.close_connection()

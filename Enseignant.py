@@ -8,10 +8,10 @@ class Enseignant:
 
     #Méthodes d'opérations CRUD
 
-    def add_enseignant_bdd(self, conn):
-            
+    def add_enseignant_bdd(self, conn):            
             cur = conn.cursor()
-            cur.execute(f"INSERT INTO enseignant (uid) VALUES ('{self.uid}')")
+            cur.execute(f"INSERT INTO enseignant (uid) VALUES (%s)",
+                        (self.uid))
             conn.commit()
             cur.close()
 

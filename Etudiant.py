@@ -11,7 +11,7 @@ class Etudiant:
 
     def add_etudiant_bdd(self, conn):               
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO etudiant (id_filiere, uid) VALUES ('{self.id_filiere}', '{self.uid}')")
+        cur.execute(f"INSERT INTO etudiant (id_filiere, uid) VALUES (%s, %s)", (self.id_filiere, self.uid))
         conn.commit()
         cur.close()
 
