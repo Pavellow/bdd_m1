@@ -1,6 +1,6 @@
 class Stage:
     
-    def __init__(self, id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat):
+    def __init__(self, id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat, date_debut, date_fin):
         self.id_etudiant = id_etudiant
         self.id_entreprise = id_entreprise
         self.id_tuteur = id_tuteur
@@ -8,17 +8,21 @@ class Stage:
         self.feedback_entreprise = feedback_entreprise
         self.feedback_prof = feedback_prof
         self.etat = etat
+        self.date_debut = date_debut
+        self.date_fin = date_fin
 
     def __str__(self):
-        return f"Stage: {self.id_etudiant}, {self.id_entreprise}, {self.id_tuteur}, {self.feedback_stage}, {self.feedback_entreprise}, {self.feedback_prof}, {self.etat}"
+        return f"Stage: {self.id_etudiant}, {self.id_entreprise}, {self.id_tuteur}, {self.feedback_stage}, {self.feedback_entreprise}, {self.feedback_prof}, {self.etat}, {self.date_debut}, {self.date_fin}"
 
     #Méthodes d'opérations CRUD
 
     def add_stage_bdd(self, conn):
-        cur = conn.cursor()
-        cur.execute(f"INSERT INTO stage (id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat) VALUES ('{self.id_etudiant}', '{self.id_entreprise}', '{self.id_tuteur}', '{self.feedback_stage}', '{self.feedback_entreprise}', '{self.feedback_prof}', '{self.etat}')")
-        conn.commit()
-        cur.close()
+            cur = conn.cursor()        
+            cur.execute(
+                 "INSERT INTO stage (id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat, date_debut, date_fin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",  (self.id_etudiant, self.id_entreprise, self.id_tuteur, self.feedback_stage, self.feedback_entreprise, self.feedback_prof, self.etat, self.date_debut, self.date_fin)
+            )
+            conn.commit()
+            cur.close()
 
     def update_stage_bdd(self, conn, id):
         cur = conn.cursor()

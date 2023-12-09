@@ -1,3 +1,4 @@
+from datetime import timedelta
 from SQLConn import *
 
 from Composante import *
@@ -7,6 +8,8 @@ from Diplome import *
 from Etape import *
 from Entreprise import *
 from Enseignant import *
+from Tuteur import *
+from Stage import *
 
 from util  import *
 from faker import Faker
@@ -174,6 +177,36 @@ def populate_etudiant():
         etudiant = Etudiant(attribution[id_etudiant], id_etudiant)
         etudiant.add_etudiant_bdd(conn)
 
+def populate_tuteur(nbr_tuteurs):
+    for _ in range(nbr_tuteurs):
+        tuteur = Tuteur(faker.name(), random.randint(1, 200))
+        tuteur.add_tuteur_bdd(conn)
+
+def get_l3m1m2():
+    cur = conn.cursor()
+    cur.execute("SELECT id_etudiant FROM etudiant INNER JOIN etape ON etudiant.id_filiere = etape.id_filiere WHERE etape.Niveau = 3 OR etape.Niveau = 4 OR etape.Niveau = 5; ")
+    rows = cur.fetchall()
+    cur.close()
+    return rows
+
+def generer_stage(id_etudiant, nb_entreprises, nb_tuteurs):
+    stages = []
+    etudiants_ayant_un_stage = set()
+
+    id_entreprise = random.randint(1, nb_entreprises)
+    id_tuteur = random.randint(1, nb_tuteurs)
+    feedback_stage = faker.text()
+    feedback_entreprise = faker.text()
+    feedback_prof = faker.text()
+    etat = random.choice(['En cours', 'Terminé', 'Planifié'])
+    date_debut = faker.date_between(start_date='-2y', end_date='today')
+    date_fin = date_debut + timedelta(days=random.randint(30, 180))  # Durée du stage entre 1 et 6 mois
+    etudiants_ayant_un_stage.add(id_etudiant)
+    stage = (id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat, date_debut, date_fin)
+    stages.append(stage)
+
+    return stages
+
 """ for i in range(1000):
     populate_compte() """
 
@@ -188,5 +221,16 @@ for i in range(1500):
     populate_etudiant(deja_used_randint) """
 
 #populate_etudiant()
+
+id_stagiaires_possible = get_l3m1m2()
+
+# Assure-toi que chaque appel de generer_stage retourne au moins un stage
+for id_stagiaire in id_stagiaires_possible:
+    stages = generer_stage(id_stagiaire[0], 200, 200)
+    if stages:
+        obj_stage = Stage(stages[0][0], stages[0][1], stages[0][2], stages[0][3], stages[0][4], stages[0][5], stages[0][6], stages[0][7], stages[0][8])
+        obj_stage.add_stage_bdd(conn)
+    else:
+        print(f"Aucun stage généré pour l'étudiant {id_stagiaire[0]}")
 
 sql.close_connection()

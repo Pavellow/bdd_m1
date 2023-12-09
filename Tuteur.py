@@ -10,7 +10,7 @@ class Tuteur:
 
     def add_tuteur_bdd(self, conn):
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO tuteur (Nom_tuteur, id_entreprise) VALUES ('{self.Nom_tuteur}', '{self.id_entreprise}')")
+        cur.execute(f"INSERT INTO tuteur (Nom_tuteur, id_entreprise) VALUES (%s, %s)", (self.Nom_tuteur, self.id_entreprise))
         conn.commit()
         cur.close()
 
