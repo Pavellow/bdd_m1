@@ -11,5 +11,3 @@ sql = SQLConn(host, user, password, db)
 sql.connect()
 
 composante = Composante()
-
-test = "a"
