@@ -194,7 +194,7 @@ def get_l3m1m2():
     rows = cur.fetchall()
     cur.close()
     return rows
-
+"""
 def generer_stage(id_etudiant, nb_entreprises, nb_tuteurs):
     stages = []
     etudiants_ayant_un_stage = set()
@@ -208,10 +208,47 @@ def generer_stage(id_etudiant, nb_entreprises, nb_tuteurs):
     date_debut = faker.date_between(start_date='-2y', end_date='today')
     date_fin = date_debut + timedelta(days=random.randint(30, 180))  # Durée du stage entre 1 et 6 mois
     etudiants_ayant_un_stage.add(id_etudiant)
-    stage = (id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat, date_debut, date_fin)
+    if etat == 'Terminé':
+        note = random.randint(0, 20)
+    else:
+        note = -1
+    stage = (id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat, date_debut, date_fin, note)
     stages.append(stage)
 
-    return stages
+    return stages """
+
+def generer_stage_non_chevauchant(id_etudiant, nb_entreprises, nb_tuteurs, stages_existants):
+    while True:
+        id_entreprise = random.randint(1, nb_entreprises)
+        id_tuteur = random.randint(1, nb_tuteurs)
+        feedback_stage = faker.text()
+        feedback_entreprise = faker.text()
+        feedback_prof = faker.text()
+        etat = random.choice(['En cours', 'Terminé', 'Planifié'])
+        date_debut = faker.date_between(start_date='-4y', end_date='today')
+        date_fin = date_debut + timedelta(days=random.randint(30, 180))  # Durée du stage entre 1 et 6 mois
+
+        # Vérifier le chevauchement
+        chevauche = any(d_fin > date_debut and d_debut < date_fin for d_debut, d_fin in stages_existants.get(id_etudiant, []))
+        if not chevauche:
+            note = random.randint(0, 20) if etat == 'Terminé' else -1
+            stage = (id_etudiant, id_entreprise, id_tuteur, feedback_stage, feedback_entreprise, feedback_prof, etat, date_debut, date_fin, note)
+
+            # Mise à jour des périodes de stage pour l'étudiant
+            if id_etudiant not in stages_existants:
+                stages_existants[id_etudiant] = []
+            stages_existants[id_etudiant].append((date_debut, date_fin))
+
+            return stage
+
+def ajouter_stages(conn, nbr_iter,  nb_entreprises, nb_tuteurs):
+    l3m1m2 = get_l3m1m2()
+    stages_existants = {}  # Dictionnaire pour suivre les périodes de stages des étudiants
+    for _ in range(nbr_iter):
+        for etud in l3m1m2:
+            stage = generer_stage_non_chevauchant(etud[0], nb_entreprises, nb_tuteurs, stages_existants)
+            obj_stage = Stage(stage[0], stage[1], stage[2], stage[3], stage[4], stage[5], stage[6], stage[7], stage[8], stage[9])
+            obj_stage.add_stage_bdd(conn)
 
 #Génération de composante.sql
 #populate_composante()
@@ -240,12 +277,6 @@ def generer_stage(id_etudiant, nb_entreprises, nb_tuteurs):
 #populate_tuteur(200)
 
 #Génération de stage.sql
-""" l3m1m2 = get_l3m1m2()
-for etud in l3m1m2:
-    stage = generer_stage(etud[0], 200, 200)
-    for s in stage:
-        stage = Stage(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8])
-        stage.ecrire_requete_dans_fichier("stages.sql") """
-
+ajouter_stages(conn, 4,  1000, 1000)
 
 sql.close_connection()
