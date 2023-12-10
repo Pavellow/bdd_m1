@@ -1,5 +1,6 @@
 from datetime import timedelta
 from SQLConn import *
+import random
 
 from Composante import *
 from Etudiant import *
@@ -115,7 +116,7 @@ def populate_etape():
     combi = generer_etapes(filieres, etapes, exclusions, etapes_dict)
     for result in combi:
         etape = Etape(result[1], result[0])
-        etape.add_etape_bdd(conn)
+        etape.ecrire_requete_dans_fichier("etapes.sql")
 
     dut = ["Génie Civil", "Métiers du Multimédia et de l'Internet", "Techniques de commercialisations", "Génie Biologique", "Génie Électrique et Informatique Industrielle", "Génie Mécanique et Productique", "Gestion Administrative et Commerciale", "Gestion des Entreprises et des Administrations", "Informatique", "Carrières Juridiques", "Métiers du Livre", "Carrières Sociales", "Gestion Logistique et Transport", "Qualité, Logistique Industrielle et Organisation", "Réseaux et Télécommunications", "Statistique et Informatique Décisionnelle", "Techniques de Commercialisation", "Techniques de Commercialisation (en apprentissage)", "Techniques de Commercialisation (en apprentissage)", "Techniques de Commercialisation (en apprentissage)"]
     niveau = ["DUT 1", "DUT 2", "BUT 1", "BUT 2", "BUT 3"]
@@ -162,8 +163,6 @@ def populate_enseignant():
         enseignant = Enseignant(i)
         #enseignant.add_enseignant_bdd(conn)
         enseignant.ecrire_requete_dans_fichier("enseignants.sql")
-
-import random
 
 def attribuer_filiere_et_compter_etudiants(nb_etudiants, nb_filieres):
     attribution_filiere = {}
@@ -214,31 +213,39 @@ def generer_stage(id_etudiant, nb_entreprises, nb_tuteurs):
 
     return stages
 
-""" for i in range(1000):
+#Génération de composante.sql
+#populate_composante()
+
+#Génération de diplome.sql
+#populate_diplome()
+
+#Génération de etape.sql
+#populate_etape()
+
+#Génération de entreprise.sql
+""" for i in range(200):
+    populate_entreprise() """
+
+#Génération de compte.sql
+""" for i in range(2000):
     populate_compte() """
 
-""" for i in range(100):
-    Entreprise(faker.company()).add_entreprise_bdd(conn) """
+#Génération de enseignant.sql
+#populate_enseignant()
 
-# Il y a actuellement 2001 comptes sur la bdd
-""" for i in range(200):
-    populate_enseignant(deja_used_randint)
-
-for i in range(1500):
-    populate_etudiant(deja_used_randint) """
-
+#Génération de etudiant.sql
 #populate_etudiant()
 
-id_stagiaires_possible = get_l3m1m2()
+#Génération de tuteur.sql
+#populate_tuteur(200)
 
-# Assure-toi que chaque appel de generer_stage retourne au moins un stage
-for id_stagiaire in id_stagiaires_possible:
-    stages = generer_stage(id_stagiaire[0], 200, 200)
-    if stages:
-        obj_stage = Stage(stages[0][0], stages[0][1], stages[0][2], stages[0][3], stages[0][4], stages[0][5], stages[0][6], stages[0][7], stages[0][8])
-        #obj_stage.add_stage_bdd(conn)
-        obj_stage.ecrire_requete_dans_fichier("stages.sql")
-    else:
-        print(f"Aucun stage généré pour l'étudiant {id_stagiaire[0]}")
+#Génération de stage.sql
+""" l3m1m2 = get_l3m1m2()
+for etud in l3m1m2:
+    stage = generer_stage(etud[0], 200, 200)
+    for s in stage:
+        stage = Stage(s[0], s[1], s[2], s[3], s[4], s[5], s[6], s[7], s[8])
+        stage.ecrire_requete_dans_fichier("stages.sql") """
+
 
 sql.close_connection()
