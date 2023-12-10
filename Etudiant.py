@@ -1,22 +1,21 @@
 class Etudiant:
 
-    def __init__(self, id_filiere, uid):
-        self.id_filiere = id_filiere
+    def __init__(self, uid):
         self.uid = uid
 
     def __str__(self):
-        return f"Etudiant: {self.id_filiere}, {self.uid}"
+        return f"Etudiant: {self.uid}"
 
     #Méthodes d'opérations CRUD
 
     def add_etudiant_bdd(self, conn):               
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO etudiant (id_filiere, uid) VALUES (%s, %s)", (self.id_filiere, self.uid))
+        cur.execute(f"INSERT INTO etudiant (uid) VALUES (%s)", (self.uid))
         conn.commit()
         cur.close()
 
     def ecrire_requete_dans_fichier(self, nom_fichier):
-        requete =f"INSERT INTO etudiant (id_filiere, uid) VALUES (%s, %s)" % (self.id_filiere, self.uid)
+        requete =f"INSERT INTO etudiant (uid) VALUES (%s)" % (self.uid)
         with open(nom_fichier, "a") as fichier:
             fichier.write(requete + "\n\n")
 

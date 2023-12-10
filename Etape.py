@@ -1,8 +1,9 @@
 class Etape:
 
-    def __init__(self, Nom_filiere, Niveau):
+    def __init__(self, Nom_filiere, Niveau, reponsable):
         self.Nom_filiere = Nom_filiere
         self.Niveau = Niveau
+        self.responsable = reponsable
 
     def __str__(self):
         return f"Etape: {self.Nom_filiere}, {self.Niveau}"
@@ -11,8 +12,8 @@ class Etape:
 
     def add_etape_bdd(self, conn):
         cur = conn.cursor()
-        cur.execute("INSERT INTO etape (Nom_filiere, Niveau) VALUES (%s, %s)", 
-                    (self.Nom_filiere, self.Niveau))
+        cur.execute("INSERT INTO etape (Nom_etape, Niveau, responsable) VALUES (%s, %s, %s)", 
+                    (self.Nom_filiere, self.Niveau, self.responsable))
         conn.commit()
         cur.close()
 
