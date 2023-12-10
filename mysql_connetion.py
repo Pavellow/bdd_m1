@@ -2,6 +2,11 @@ from datetime import timedelta
 from SQLConn import *
 import random
 
+# Les fonctions populate_xxx() permettent de générer des données aléatoires pour les tables de la base de données
+# Si vous voulez générer des scripts, ne touchez pas à ces fonctions
+# Si vous voulez ajouter des données dans la base de données, décommenter la ligne ecrire_dans_fichier jsp quoi
+# et décommentez la ligne add_xxx_bdd() en modifiant les infos pour la base de données dans les variables de la ligne 26 à 30
+
 from Composante import *
 from Etudiant import *
 from Compte import *
@@ -277,6 +282,7 @@ def ajouter_stages(conn, nbr_iter,  nb_entreprises, nb_tuteurs):
 #populate_tuteur(200)
 
 #Génération de stage.sql
-ajouter_stages(conn, 4,  1000, 1000)
+# /!\ Cette fonction ajoute en base de données 4 stages pour chaque étudiant de L3, M1 et M2
+#ajouter_stages(conn, 4,  1000, 1000)
 
 sql.close_connection()
