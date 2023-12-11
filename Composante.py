@@ -1,14 +1,13 @@
 class Composante:
     
-    def __init__(self, libelle, id_composante):
+    def __init__(self, libelle):
         self.Libelle_composante = libelle
-        self.id_composante = id_composante
 
     def __str__(self):
         return f"Composante: {self.Libelle_composante}"
     
     def to_string(self):
-        return f"Composante: {self.Libelle_composante} | id: {self.id_composante}"
+        return f"Composante: {self.Libelle_composante}"
     
     def set_libelle(self, libelle_param):
         self.Libelle_composante = libelle_param
@@ -26,8 +25,8 @@ class Composante:
             conn (pymsql): connexion à la base de données
             """
         cur = conn.cursor()
-        cur.execute("INSERT INTO composante (Libelle_composante, id_composante) VALUES (%s, %s)", 
-                    (self.Libelle_composante, self.id_composante))
+        cur.execute("INSERT INTO composante (Libelle_composante) VALUES ( %s)", 
+                    (self.Libelle_composante))
         conn.commit()
         cur.close()
 

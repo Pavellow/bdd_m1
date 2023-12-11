@@ -47,3 +47,29 @@ class SQLConn:
         self.cursor.execute(query)
         self.conn.commit()
         self.close_connection()
+
+    def get_row(self, table, condition):
+        if condition == "":
+            query = f"SELECT * FROM {table}"
+        else:
+            query = f"SELECT * FROM {table} WHERE {condition}"
+        conn = self.connect_to_bdd()
+        cursor = conn.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        return rows
+    
+    def reset_ai(self, table):
+        query = "ALTER TABLE {} AUTO_INCREMENT = 1".format(table)
+        conn = self.connect_to_bdd()
+        cursor = conn.cursor()
+        cursor.execute(query)
+        conn.commit()
+
+    def delete_all_data(self, tables):
+        for table in tables:
+            query = f"DELETE FROM {table}"
+            conn = self.connect_to_bdd()
+            cursor = conn.cursor()
+            cursor.execute(query)
+            conn.commit()

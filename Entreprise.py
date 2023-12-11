@@ -6,7 +6,7 @@ class Entreprise:
         self.adresse_entreprise = adresse_entreprise
 
     def __str__(self):
-        return f"Entreprise: {self.Nom}"
+        return f"Entreprise: {self.nom_entreprise}"
     
     # Getter pour le nom
     def get_nom(self):
@@ -25,7 +25,7 @@ class Entreprise:
         conn.commit()
         cur.close()
 
-    def ecrire_requete_dans_fichier(self, nom_fichier):
-        requete = "INSERT INTO entreprise (nom_entreprise) VALUES (%s)" % (self.Nom)
-        with open(nom_fichier, "a") as fichier:
-            fichier.write(requete + "\n\n")
+def ecrire_requete_dans_fichier(self, nom_fichier):
+    requete = "INSERT INTO entreprise (siret, nom_entreprise, adresse_entreprise) VALUES ('{}', '{}', '{}')".format(self.siret, self.nom_entreprise, self.adresse_entreprise)
+    with open(nom_fichier, "a") as fichier:
+        fichier.write(requete + "\n\n")
